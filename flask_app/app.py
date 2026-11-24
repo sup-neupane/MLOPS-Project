@@ -71,30 +71,21 @@ def normalize_text(text):
 
     return text
 
-# Below code block is for local use
-# -------------------------------------------------------------------------------------
-mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI"))
-dagshub.init(repo_owner=os.getenv("DAGSHUB_REPO_OWNER"), repo_name=os.getenv("DAGSHUB_REPO_NAME"), mlflow=True)
-# -------------------------------------------------------------------------------------
+dagshub_token = os.getenv("CAPSTONE_TEST")
+repo_owner = os.getenv("DAGSHUB_REPO_OWNER")
+repo_name = os.getenv("DAGSHUB_REPO_NAME")
 
+if dagshub_token:
+    os.environ["MLFLOW_TRACKING_USERNAME"] = repo_owner or dagshub_token
+    os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
 
-# Below code block is for production use
-# -------------------------------------------------------------------------------------
-# Set up DagsHub credentials for MLflow tracking
-# dagshub_token = os.getenv("CAPSTONE_TEST")
-# if not dagshub_token:
-#     raise EnvironmentError("CAPSTONE_TEST environment variable is not set")
+# Set up MLflow tracking URI
+MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI")
 
-# os.environ["MLFLOW_TRACKING_USERNAME"] = dagshub_token
-# os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
+if not MLFLOW_TRACKING_URI:
+    raise EnvironmentError("MLFLOW_TRACKING_URI is not set in .env")
 
-# dagshub_url = "https://dagshub.com"
-# repo_owner = os.getenv("DAGSHUB_REPO_OWNER")
-# repo_name = os.getenv("DAGSHUB_REPO_NAME")
-# # Set up MLflow tracking URI
-# mlflow.set_tracking_uri(f'{dagshub_url}/{repo_owner}/{repo_name}.mlflow')
-# -------------------------------------------------------------------------------------
-
+mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 
 # Initialize Flask app
 app = Flask(__name__)
