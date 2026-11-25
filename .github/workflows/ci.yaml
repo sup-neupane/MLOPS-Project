@@ -89,3 +89,26 @@ jobs:
         run: |
           docker push \
             "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:latest"
+
+      - name: Set Up kubectl
+        if: success()
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Update kubeconfig
+        if: success()
+        run: |
+          aws eks update-kubeconfig --region "$AWS_REGION" --name flask-app-cluster
+
+      - name: Create Kubernetes Secret
+        if: success()
+        run: |
+          kubectl create secret generic capstone-secret \
+            --from-literal=CAPSTONE_TEST="${CAPSTONE_TEST}" \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Deploy to EKS
+        if: success()
+        run: |
+          kubectl apply -f deployment.yaml
