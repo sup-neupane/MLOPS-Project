@@ -35,6 +35,30 @@ spec:
               name: capstone-secret
               key: CAPSTONE_TEST
 
+        - name: MLFLOW_TRACKING_URI
+          valueFrom:
+            secretKeyRef:
+              name: capstone-secret
+              key: MLFLOW_TRACKING_URI
+
+        - name: MLFLOW_TRACKING_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: capstone-secret
+              key: MLFLOW_TRACKING_USERNAME
+
+        - name: DAGSHUB_REPO_NAME
+          valueFrom:
+            secretKeyRef:
+              name: capstone-secret
+              key: DAGSHUB_REPO_NAME
+
+        - name: DAGSHUB_REPO_OWNER
+          valueFrom:
+            secretKeyRef:
+              name: capstone-secret
+              key: DAGSHUB_REPO_OWNER
+
 ---
 apiVersion: v1
 kind: Service

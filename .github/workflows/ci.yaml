@@ -106,6 +106,10 @@ jobs:
         run: |
           kubectl create secret generic capstone-secret \
             --from-literal=CAPSTONE_TEST="${CAPSTONE_TEST}" \
+            --from-literal=MLFLOW_TRACKING_URI="${MLFLOW_TRACKING_URI}" \
+            --from-literal=MLFLOW_TRACKING_USERNAME="${MLFLOW_TRACKING_USERNAME}" \
+            --from-literal=DAGSHUB_REPO_NAME="${DAGSHUB_REPO_NAME}" \
+            --from-literal=DAGSHUB_REPO_OWNER="${DAGSHUB_REPO_OWNER}" \
             --dry-run=client -o yaml | kubectl apply -f -
 
       - name: Deploy to EKS
